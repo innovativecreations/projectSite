@@ -1,10 +1,17 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
+const session = require('express-session');
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({
+    secret: 'your_secret_key',
+    resave: false,
+    saveUninitialized: true,
+}));
+
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
@@ -23,6 +30,7 @@ app.get('/login', (req, res) => {
 app.post('/auth', (req, res) => {
     const userPassword = req.body.password;
     if (userPassword === password) {
+        req.session.loggedIn = true;
         res.redirect('/database');
     } else {
         res.send('Incorrect password');
@@ -30,12 +38,18 @@ app.post('/auth', (req, res) => {
 });
 
 app.get('/database', (req, res) => {
-    res.render('database', { projects });
+    if (req.session.loggedIn) {
+        res.render('database', { projects, editable: true });
+    } else {
+        res.render('database', { projects, editable: false });
+    }
 });
 
 app.post('/edit', (req, res) => {
-    const { index, name, repo, thumbnail } = req.body;
-    projects[index] = { name, repo, thumbnail };
+    if (req.session.loggedIn) {
+        const { index, name, repo, thumbnail } = req.body;
+        projects[index] = { name, repo, thumbnail };
+    }
     res.redirect('/database');
 });
 

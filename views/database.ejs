@@ -14,7 +14,9 @@
                 <th>Project Name</th>
                 <th>Repo Link</th>
                 <th>Thumbnail</th>
-                <th>Edit</th>
+                <% if (editable) { %>
+                    <th>Edit</th>
+                <% } %>
             </tr>
         </thead>
         <tbody>
@@ -23,15 +25,17 @@
                     <td><%= project.name %></td>
                     <td><a href="<%= project.repo %>"><%= project.repo %></a></td>
                     <td><img src="<%= project.thumbnail %>" alt="<%= project.name %> Thumbnail"></td>
-                    <td>
-                        <form action="/edit" method="post">
-                            <input type="hidden" name="index" value="<%= index %>">
-                            <input type="text" name="name" value="<%= project.name %>" required>
-                            <input type="url" name="repo" value="<%= project.repo %>" required>
-                            <input type="url" name="thumbnail" value="<%= project.thumbnail %>" required>
-                            <button type="submit">Save</button>
-                        </form>
-                    </td>
+                    <% if (editable) { %>
+                        <td>
+                            <form action="/edit" method="post">
+                                <input type="hidden" name="index" value="<%= index %>">
+                                <input type="text" name="name" value="<%= project.name %>" required>
+                                <input type="url" name="repo" value="<%= project.repo %>" required>
+                                <input type="url" name="thumbnail" value="<%= project.thumbnail %>" required>
+                                <button type="submit">Save</button>
+                            </form>
+                        </td>
+                    <% } %>
                 </tr>
             <% }) %>
         </tbody>
