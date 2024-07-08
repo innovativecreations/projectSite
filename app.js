@@ -8,7 +8,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-const projects = [
+let projects = [
     { name: "Project One", repo: "https://github.com/user/project-one", thumbnail: "https://via.placeholder.com/150" },
     { name: "Project Two", repo: "https://github.com/user/project-two", thumbnail: "https://via.placeholder.com/150" },
     { name: "Project Three", repo: "https://github.com/user/project-three", thumbnail: "https://via.placeholder.com/150" }
@@ -31,6 +31,12 @@ app.post('/auth', (req, res) => {
 
 app.get('/database', (req, res) => {
     res.render('database', { projects });
+});
+
+app.post('/edit', (req, res) => {
+    const { index, name, repo, thumbnail } = req.body;
+    projects[index] = { name, repo, thumbnail };
+    res.redirect('/database');
 });
 
 app.listen(3000, () => {

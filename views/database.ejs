@@ -4,24 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Database</title>
-    <link rel="stylesheet" href="database.css">
+    <link rel="stylesheet" href="/database.css">
 </head>
 <body>
-    <h1>Project Database</h1>
-    <table border="1">
+    <h2>Project Database</h2>
+    <table>
         <thead>
             <tr>
                 <th>Project Name</th>
                 <th>Repo Link</th>
                 <th>Thumbnail</th>
+                <th>Edit</th>
             </tr>
         </thead>
         <tbody>
-            <% projects.forEach(project => { %>
+            <% projects.forEach((project, index) => { %>
                 <tr>
                     <td><%= project.name %></td>
                     <td><a href="<%= project.repo %>"><%= project.repo %></a></td>
-                    <td><img src="<%= project.thumbnail %>" alt="<%= project.name %> Thumbnail" width="100"></td>
+                    <td><img src="<%= project.thumbnail %>" alt="<%= project.name %> Thumbnail"></td>
+                    <td>
+                        <form action="/edit" method="post">
+                            <input type="hidden" name="index" value="<%= index %>">
+                            <input type="text" name="name" value="<%= project.name %>" required>
+                            <input type="url" name="repo" value="<%= project.repo %>" required>
+                            <input type="url" name="thumbnail" value="<%= project.thumbnail %>" required>
+                            <button type="submit">Save</button>
+                        </form>
+                    </td>
                 </tr>
             <% }) %>
         </tbody>
