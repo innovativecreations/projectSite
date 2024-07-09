@@ -7,10 +7,14 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <form action="/auth" method="post">
-        <h1>Who are you?</h1>
-        <input type="password" id="password" name="password" required placeholder="Do you remember yourself?">
-        <button type="submit">Login</button>
-    </form>
+    <button id="toggleButton" class="toggle-btn">Toggle Night/Light Mode</button>
+    <div class="login-container">
+        <form action="/auth" method="post" class="login-form">
+            <h1>Who are you?</h1>
+            <input type="password" id="password" name="password" required placeholder="Do you remember?">
+            <button type="submit">Login</button>
+        </form>
+    </div>
+    <script src="/script.js"></script>
 </body>
 </html>
