@@ -3,16 +3,15 @@ const toggleButton = document.getElementById('toggleButton');
 function setTheme(theme) {
     document.body.className = theme;
     localStorage.setItem('theme', theme);
+    toggleButton.textContent = theme === 'dark' ? 'Light' : 'Dark';
 }
 
 toggleButton.addEventListener('click', () => {
     let currentTheme = localStorage.getItem('theme');
     if (currentTheme === 'dark') {
         setTheme('light');
-        document.getElementById("toggleButton").innerText = "Dark";
     } else {
         setTheme('dark');
-        document.getElementById("toggleButton").innerText = "Light";
     }
 });
 

@@ -16,14 +16,17 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 let projects = [
-    { name: "Project One", repo: "https://github.com/user/project-one", thumbnail: "https://via.placeholder.com/150" },
-    { name: "Project Two", repo: "https://github.com/user/project-two", thumbnail: "https://via.placeholder.com/150" },
-    { name: "Project Three", repo: "https://github.com/user/project-three", thumbnail: "https://via.placeholder.com/150" }
+    { name: "Project One", description: "Description One", repo: "https://github.com/user/project-one", link: "https://example.com/project-one", readme: "https://example.com/project-one/readme", thumbnail: "https://via.placeholder.com/150" },
+    { name: "Project Two", description: "Description Two", repo: "https://github.com/user/project-two", link: "https://example.com/project-two", readme: "https://example.com/project-two/readme", thumbnail: "https://via.placeholder.com/150" },
+    { name: "Project Three", description: "Description Three", repo: "https://github.com/user/project-three", link: "https://example.com/project-three", readme: "https://example.com/project-three/readme", thumbnail: "https://via.placeholder.com/150" }
 ];
 
 const password = "123";
 
 app.get('/login', (req, res) => {
+    if (req.session.loggedIn) {
+        return res.redirect('/database');
+    }
     res.render('login');
 });
 
@@ -47,8 +50,8 @@ app.get('/database', (req, res) => {
 
 app.post('/edit', (req, res) => {
     if (req.session.loggedIn) {
-        const { index, name, repo, thumbnail } = req.body;
-        projects[index] = { name, repo, thumbnail };
+        const { index, name, description, repo, link, readme, thumbnail } = req.body;
+        projects[index] = { name, description, repo, link, readme, thumbnail };
     }
     res.redirect('/database');
 });

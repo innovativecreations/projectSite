@@ -110,10 +110,10 @@ body.dark .login-form input[type="password"] {
 
 body.dark .login-form button {
     background-color: #ff7f50;
-    color: black;
+    color: rgb(255, 255, 255);
 }
 
 body.dark .toggle-btn {
     background-color: #ff7f50;
-    color: black;
+    color: rgb(255, 255, 255);
 }

@@ -7,7 +7,7 @@
     <title>Database Page</title>
 </head>
 <body>
-    <button id="toggleButton" class="toggle-btn">Toggle Theme</button>
+    <button id="toggleButton" class="toggle-btn">Dark Mode</button>
     <% if (editable) { %>
     <a href="/logout" class="logout-btn">Logout</a>
     <% } %>
@@ -17,7 +17,10 @@
             <thead>
                 <tr>
                     <th>Name</th>
+                    <th>Description</th>
                     <th>Repository</th>
+                    <th>Link</th>
+                    <th>Readme</th>
                     <th>Thumbnail</th>
                 </tr>
             </thead>
@@ -38,10 +41,40 @@
                         <% if (editable) { %>
                         <form action="/edit" method="post" class="edit-form">
                             <input type="hidden" name="index" value="<%= index %>">
+                            <input type="text" name="description" value="<%= project.description %>">
+                        </form>
+                        <% } else { %>
+                        <%= project.description %>
+                        <% } %>
+                    </td>
+                    <td>
+                        <% if (editable) { %>
+                        <form action="/edit" method="post" class="edit-form">
+                            <input type="hidden" name="index" value="<%= index %>">
                             <input type="text" name="repo" value="<%= project.repo %>">
                         </form>
                         <% } else { %>
                         <a href="<%= project.repo %>"><%= project.repo %></a>
+                        <% } %>
+                    </td>
+                    <td>
+                        <% if (editable) { %>
+                        <form action="/edit" method="post" class="edit-form">
+                            <input type="hidden" name="index" value="<%= index %>">
+                            <input type="text" name="link" value="<%= project.link %>">
+                        </form>
+                        <% } else { %>
+                        <a href="<%= project.link %>"><%= project.link %></a>
+                        <% } %>
+                    </td>
+                    <td>
+                        <% if (editable) { %>
+                        <form action="/edit" method="post" class="edit-form">
+                            <input type="hidden" name="index" value="<%= index %>">
+                            <input type="text" name="readme" value="<%= project.readme %>">
+                        </form>
+                        <% } else { %>
+                        <a href="<%= project.readme %>">Readme</a>
                         <% } %>
                     </td>
                     <td>
