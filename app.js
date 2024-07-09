@@ -53,6 +53,12 @@ app.post('/edit', (req, res) => {
     res.redirect('/database');
 });
 
+app.get('/logout', (req, res) => {
+    req.session.destroy(() => {
+        res.redirect('/login');
+    });
+});
+
 app.listen(3000, () => {
     console.log('Server is running on http://localhost:3000/login');
 });

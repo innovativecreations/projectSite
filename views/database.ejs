@@ -3,42 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Database</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="database.css">
+    <title>Database Page</title>
 </head>
 <body>
-    <button id="toggleButton" class="toggle-btn">Toggle Night/Light Mode</button>
+    <button id="toggleButton" class="toggle-btn">Toggle Theme</button>
+    <% if (editable) { %>
+    <a href="/logout" class="logout-btn">Logout</a>
+    <% } %>
     <div class="container">
-        <h2>Project Database</h2>
+        <h2>Projects Database</h2>
         <table>
             <thead>
                 <tr>
-                    <th>Project Name</th>
-                    <th>Repo Link</th>
+                    <th>Name</th>
+                    <th>Repository</th>
                     <th>Thumbnail</th>
                 </tr>
             </thead>
             <tbody>
                 <% projects.forEach((project, index) => { %>
-                    <tr>
+                <tr>
+                    <td>
                         <% if (editable) { %>
-                            <form action="/edit" method="post">
-                                <input type="hidden" name="index" value="<%= index %>">
-                                <td><input type="text" name="name" value="<%= project.name %>" required></td>
-                                <td><input type="url" name="repo" value="<%= project.repo %>" required></td>
-                                <td><input type="url" name="thumbnail" value="<%= project.thumbnail %>" required></td>
-                                <td><button type="submit">Save</button></td>
-                            </form>
+                        <form action="/edit" method="post" class="edit-form">
+                            <input type="hidden" name="index" value="<%= index %>">
+                            <input type="text" name="name" value="<%= project.name %>">
+                        </form>
                         <% } else { %>
-                            <td><%= project.name %></td>
-                            <td><a href="<%= project.repo %>"><%= project.repo %></a></td>
-                            <td><img src="<%= project.thumbnail %>" alt="<%= project.name %> Thumbnail"></td>
+                        <%= project.name %>
                         <% } %>
-                    </tr>
-                <% }) %>
+                    </td>
+                    <td>
+                        <% if (editable) { %>
+                        <form action="/edit" method="post" class="edit-form">
+                            <input type="hidden" name="index" value="<%= index %>">
+                            <input type="text" name="repo" value="<%= project.repo %>">
+                        </form>
+                        <% } else { %>
+                        <a href="<%= project.repo %>"><%= project.repo %></a>
+                        <% } %>
+                    </td>
+                    <td>
+                        <% if (editable) { %>
+                        <form action="/edit" method="post" class="edit-form">
+                            <input type="hidden" name="index" value="<%= index %>">
+                            <input type="text" name="thumbnail" value="<%= project.thumbnail %>">
+                        </form>
+                        <% } else { %>
+                        <img src="<%= project.thumbnail %>" alt="<%= project.name %>">
+                        <% } %>
+                    </td>
+                </tr>
+                <% }); %>
             </tbody>
         </table>
     </div>
-    <script src="/script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
