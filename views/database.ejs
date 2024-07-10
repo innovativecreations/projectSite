@@ -31,11 +31,21 @@
             <tbody>
                 <% projects.forEach((project, index) => { %>
                 <tr>
-                    <td><%= index + 1 %></td>
                     <td>
                         <% if (editable) { %>
                         <form id="form<%= index %>" action="/edit" method="post" class="edit-form">
                             <input type="hidden" name="index" value="<%= index %>">
+                            <input type="text" name="serialNo" value="<%= project.serialNo %>" readonly>
+                        </form>
+                        <% } else { %>
+                        <%= project.serialNo %>
+                        <% } %>
+                    </td>
+                    <td>
+                        <% if (editable) { %>
+                        <form action="/edit" method="post" class="edit-form">
+                            <input type="hidden" name="index" value="<%= index %>">
+                            <input type="hidden" name="serialNo" value="<%= project.serialNo %>">
                             <input type="text" name="name" value="<%= project.name %>">
                         </form>
                         <% } else { %>
@@ -46,6 +56,7 @@
                         <% if (editable) { %>
                         <form action="/edit" method="post" class="edit-form">
                             <input type="hidden" name="index" value="<%= index %>">
+                            <input type="hidden" name="serialNo" value="<%= project.serialNo %>">
                             <input type="text" name="description" value="<%= project.description %>">
                         </form>
                         <% } else { %>
@@ -56,6 +67,7 @@
                         <% if (editable) { %>
                         <form action="/edit" method="post" class="edit-form">
                             <input type="hidden" name="index" value="<%= index %>">
+                            <input type="hidden" name="serialNo" value="<%= project.serialNo %>">
                             <input type="text" name="repo" value="<%= project.repo %>">
                         </form>
                         <% } else { %>
@@ -66,6 +78,7 @@
                         <% if (editable) { %>
                         <form action="/edit" method="post" class="edit-form">
                             <input type="hidden" name="index" value="<%= index %>">
+                            <input type="hidden" name="serialNo" value="<%= project.serialNo %>">
                             <input type="text" name="link" value="<%= project.link %>">
                         </form>
                         <% } else { %>
@@ -76,6 +89,7 @@
                         <% if (editable) { %>
                         <form action="/edit" method="post" class="edit-form">
                             <input type="hidden" name="index" value="<%= index %>">
+                            <input type="hidden" name="serialNo" value="<%= project.serialNo %>">
                             <input type="text" name="readme" value="<%= project.readme %>">
                         </form>
                         <% } else { %>
@@ -86,6 +100,7 @@
                         <% if (editable) { %>
                         <form action="/edit" method="post" class="edit-form">
                             <input type="hidden" name="index" value="<%= index %>">
+                            <input type="hidden" name="serialNo" value="<%= project.serialNo %>">
                             <input type="text" name="thumbnail" value="<%= project.thumbnail %>">
                         </form>
                         <% } else { %>
@@ -102,7 +117,7 @@
                 <% if (editable) { %>
                 <tr>
                     <form action="/add" method="post" class="edit-form">
-                        <td>#</td>
+                        <td><input type="text" name="serialNo" placeholder="Serial No"></td>
                         <td><input type="text" name="name" placeholder="Name"></td>
                         <td><input type="text" name="description" placeholder="Description"></td>
                         <td><input type="text" name="repo" placeholder="Repository"></td>

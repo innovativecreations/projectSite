@@ -31,7 +31,7 @@ async function run() {
         const db = client.db(dbName);
         const collection = db.collection("projects");
 
-        projects = await collection.find().toArray();
+        projects = await collection.find().sort({ serialNo: 1 }).toArray();
 
         app.get('/login', (req, res) => {
             if (req.session.loggedIn) {
@@ -52,23 +52,23 @@ async function run() {
 
         app.get('/database', async (req, res) => {
             if (req.session.loggedIn) {
-                projects = await collection.find().toArray();
+                projects = await collection.find().sort({ serialNo: 1 }).toArray();
                 res.render('database', { projects, editable: true });
             } else {
-                projects = await collection.find().toArray();
+                projects = await collection.find().sort({ serialNo: 1 }).toArray();
                 res.render('database', { projects, editable: false });
             }
         });
 
         app.post('/edit', async (req, res) => {
             if (req.session.loggedIn) {
-                const { index, name, description, repo, link, readme, thumbnail } = req.body;
-                const project = { name, description, repo, link, readme, thumbnail };
+                const { index, serialNo, name, description, repo, link, readme, thumbnail } = req.body;
+                const project = { serialNo: parseInt(serialNo, 10), name, description, repo, link, readme, thumbnail };
                 const id = projects[index]._id;
 
                 await collection.updateOne({ _id: id }, { $set: project });
 
-                projects = await collection.find().toArray();
+                projects = await collection.find().sort({ serialNo: 1 }).toArray();
                 console.log("This data is updated:", project);
                 res.redirect('/database');
             } else {
@@ -78,17 +78,29 @@ async function run() {
 
         app.post('/add', async (req, res) => {
             if (req.session.loggedIn) {
-                const { name, description, repo, link, readme, thumbnail } = req.body;
-                const newProject = { name, description, repo, link, readme, thumbnail };
+                let { serialNo, name, description, repo, link, readme, thumbnail } = req.body;
+                serialNo = parseInt(serialNo, 10);
 
-                const existingProject = await collection.findOne({ name, repo });
+                if (isNaN(serialNo)) {
+                    const lastProject = await collection.find().sort({ serialNo: -1 }).limit(1).next();
+                    serialNo = lastProject ? lastProject.serialNo + 1 : 1;
+                }
+
+                const newProject = { serialNo, name, description, repo, link, readme, thumbnail };
+
+                const existingProject = await collection.findOne({ serialNo: newProject.serialNo });
                 if (!existingProject) {
                     await collection.insertOne(newProject);
-                    projects = await collection.find().toArray();
-                    console.log("This data is inserted:", newProject);
                 } else {
-                    console.log("Duplicate entry found. Skipping insertion.");
+                    const projectsToShift = await collection.find({ serialNo: { $gte: newProject.serialNo } }).sort({ serialNo: 1 }).toArray();
+                    for (let project of projectsToShift) {
+                        await collection.updateOne({ _id: project._id }, { $set: { serialNo: project.serialNo + 1 } });
+                    }
+                    await collection.insertOne(newProject);
                 }
+
+                projects = await collection.find().sort({ serialNo: 1 }).toArray();
+                console.log("This data is inserted:", newProject);
                 
                 res.redirect('/database');
             } else {
