@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="database.css">
-    <title>Database Page</title>
+    <title>Projects Database</title>
 </head>
 <body>
     <button id="toggleButton" class="toggle-btn">Dark Mode</button>
@@ -16,20 +16,25 @@
         <table>
             <thead>
                 <tr>
+                    <th>Sl. No</th>
                     <th>Name</th>
                     <th>Description</th>
                     <th>Repository</th>
                     <th>Link</th>
                     <th>Readme</th>
                     <th>Thumbnail</th>
+                    <% if (editable) { %>
+                    <th>Action</th>
+                    <% } %>
                 </tr>
             </thead>
             <tbody>
                 <% projects.forEach((project, index) => { %>
                 <tr>
+                    <td><%= index + 1 %></td>
                     <td>
                         <% if (editable) { %>
-                        <form action="/edit" method="post" class="edit-form">
+                        <form id="form<%= index %>" action="/edit" method="post" class="edit-form">
                             <input type="hidden" name="index" value="<%= index %>">
                             <input type="text" name="name" value="<%= project.name %>">
                         </form>
@@ -87,8 +92,27 @@
                         <img src="<%= project.thumbnail %>" alt="<%= project.name %>">
                         <% } %>
                     </td>
+                    <% if (editable) { %>
+                    <td>
+                        <button type="submit" form="form<%= index %>">Save</button>
+                    </td>
+                    <% } %>
                 </tr>
                 <% }); %>
+                <% if (editable) { %>
+                <tr>
+                    <form action="/add" method="post" class="edit-form">
+                        <td>#</td>
+                        <td><input type="text" name="name" placeholder="Name"></td>
+                        <td><input type="text" name="description" placeholder="Description"></td>
+                        <td><input type="text" name="repo" placeholder="Repository"></td>
+                        <td><input type="text" name="link" placeholder="Link"></td>
+                        <td><input type="text" name="readme" placeholder="Readme"></td>
+                        <td><input type="text" name="thumbnail" placeholder="Thumbnail"></td>
+                        <td><button type="submit">Add</button></td>
+                    </form>
+                </tr>
+                <% } %>
             </tbody>
         </table>
     </div>

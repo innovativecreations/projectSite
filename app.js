@@ -16,68 +16,98 @@ app.use(session({
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-const uri = 'your_mongodb_connection_string';
+const uri = 'mongodb://localhost:27017';
+const dbName = 'Mayank';
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
-let projects = [
-    { name: "Project One", description: "Description One", repo: "https://github.com/user/project-one", link: "https://example.com/project-one", readme: "https://example.com/project-one/readme", thumbnail: "https://via.placeholder.com/150" },
-    { name: "Project Two", description: "Description Two", repo: "https://github.com/user/project-two", link: "https://example.com/project-two", readme: "https://example.com/project-two/readme", thumbnail: "https://via.placeholder.com/150" },
-    { name: "Project Three", description: "Description Three", repo: "https://github.com/user/project-three", link: "https://example.com/project-three", readme: "https://example.com/project-three/readme", thumbnail: "https://via.placeholder.com/150" }
-];
+let projects = [];
 
 const password = "123";
 
-client.connect(err => {
-    if (err) throw err;
-    console.log("Connected to MongoDB");
-    const collection = client.db("test").collection("projects");
+async function run() {
+    try {
+        await client.connect();
+        console.log("Connected to MongoDB");
+        const db = client.db(dbName);
+        const collection = db.collection("projects");
 
-    app.get('/login', (req, res) => {
-        if (req.session.loggedIn) {
-            return res.redirect('/database');
-        }
-        res.render('login');
-    });
+        projects = await collection.find().toArray();
 
-    app.post('/auth', (req, res) => {
-        const userPassword = req.body.password;
-        if (userPassword === password) {
-            req.session.loggedIn = true;
-            res.redirect('/database');
-        } else {
-            res.send('Incorrect password');
-        }
-    });
-
-    app.get('/database', (req, res) => {
-        if (req.session.loggedIn) {
-            res.render('database', { projects, editable: true });
-        } else {
-            res.render('database', { projects, editable: false });
-        }
-    });
-
-    app.post('/edit', (req, res) => {
-        if (req.session.loggedIn) {
-            const { index, name, description, repo, link, readme, thumbnail } = req.body;
-            projects[index] = { name, description, repo, link, readme, thumbnail };
-            collection.insertOne(projects[index], (err, result) => {
-                if (err) throw err;
-                console.log("This data is inserted: ", result.ops[0]);
-                res.redirect('/database');
-            });
-        } else {
-            res.redirect('/database');
-        }
-    });
-
-    app.get('/logout', (req, res) => {
-        req.session.destroy(() => {
-            res.redirect('/login');
+        app.get('/login', (req, res) => {
+            if (req.session.loggedIn) {
+                return res.redirect('/database');
+            }
+            res.render('login');
         });
-    });
 
-    app.listen(3000, () => {
-        console.log('Server is running on http://localhost:3000/login');
-    });
-});
+        app.post('/auth', (req, res) => {
+            const userPassword = req.body.password;
+            if (userPassword === password) {
+                req.session.loggedIn = true;
+                res.redirect('/database');
+            } else {
+                res.send('Incorrect password');
+            }
+        });
+
+        app.get('/database', async (req, res) => {
+            if (req.session.loggedIn) {
+                projects = await collection.find().toArray();
+                res.render('database', { projects, editable: true });
+            } else {
+                projects = await collection.find().toArray();
+                res.render('database', { projects, editable: false });
+            }
+        });
+
+        app.post('/edit', async (req, res) => {
+            if (req.session.loggedIn) {
+                const { index, name, description, repo, link, readme, thumbnail } = req.body;
+                const project = { name, description, repo, link, readme, thumbnail };
+                const id = projects[index]._id;
+
+                await collection.updateOne({ _id: id }, { $set: project });
+
+                projects = await collection.find().toArray();
+                console.log("This data is updated:", project);
+                res.redirect('/database');
+            } else {
+                res.redirect('/database');
+            }
+        });
+
+        app.post('/add', async (req, res) => {
+            if (req.session.loggedIn) {
+                const { name, description, repo, link, readme, thumbnail } = req.body;
+                const newProject = { name, description, repo, link, readme, thumbnail };
+
+                const existingProject = await collection.findOne({ name, repo });
+                if (!existingProject) {
+                    await collection.insertOne(newProject);
+                    projects = await collection.find().toArray();
+                    console.log("This data is inserted:", newProject);
+                } else {
+                    console.log("Duplicate entry found. Skipping insertion.");
+                }
+                
+                res.redirect('/database');
+            } else {
+                res.redirect('/database');
+            }
+        });
+
+        app.get('/logout', (req, res) => {
+            req.session.destroy(() => {
+                res.redirect('/login');
+            });
+        });
+
+        app.listen(3000, () => {
+            console.log('Server is running on http://localhost:3000/login');
+        });
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+run().catch(console.dir);
