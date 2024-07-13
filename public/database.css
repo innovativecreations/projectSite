@@ -19,6 +19,8 @@ table {
     background-color: #444;
     color: #fff;
     text-align: left;
+    border-radius: 12px;
+    overflow: hidden; 
 }
 
 th {
@@ -83,6 +85,30 @@ tr:nth-child(even) {
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
+.add-form {
+    margin-top: 40px;
+    text-align: left;
+    background-color: #444;
+    padding: 20px;
+    border-radius: 12px;
+}
+
+.add-form h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #FF5733;
+}
+
+.add-form .form-group {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.add-form .form-group input[type="text"] {
+    flex: 1 1 calc(33.333% - 10px);
+    margin: 5px;
+}
+
 body.light {
     background-color: #f0f0f0;
     color: black;
@@ -119,3 +145,26 @@ body.light input[type="text"] {
 body.light input[type="text"]::placeholder {
     color: #888;
 }
+
+body.light .toggle-btn, body.light .logout-btn, body.light .save-btn, body.light .add-btn {
+    background-color: #FF5733;
+    color: white;
+}
+
+body.light .toggle-btn:hover, body.light .logout-btn:hover, body.light .save-btn:hover, body.light .add-btn:hover {
+    background-color: #ff4500;
+}
+
+body.light .add-form {
+    background-color: #f9f9f9;
+}
+
+body.light .add-form .form-group input[type="text"] {
+    background-color: #ddd;
+    color: #000;
+}
+
+body.light .add-form h3 {
+    color: #FF5733;
+}
+

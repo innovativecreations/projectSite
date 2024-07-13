@@ -62,14 +62,20 @@ async function run() {
 
         app.post('/edit', async (req, res) => {
             if (req.session.loggedIn) {
-                const { index, serialNo, name, description, repo, link, readme, thumbnail } = req.body;
-                const project = { serialNo: parseInt(serialNo, 10), name, description, repo, link, readme, thumbnail };
-                const id = projects[index]._id;
+                const updatedProjects = req.body.projects.map(project => ({
+                    ...project,
+                    serialNo: parseInt(project.serialNo, 10)
+                }));
 
-                await collection.updateOne({ _id: id }, { $set: project });
+                for (const project of updatedProjects) {
+                    const existingProject = await collection.findOne({ serialNo: project.serialNo });
+                    if (existingProject && existingProject._id.toString() !== project._id) {
+                        await collection.updateOne({ _id: existingProject._id }, { $set: { serialNo: project.originalSerialNo } });
+                    }
+                    await collection.updateOne({ _id: project._id }, { $set: project });
+                }
 
                 projects = await collection.find().sort({ serialNo: 1 }).toArray();
-                console.log("This data is updated:", project);
                 res.redirect('/database');
             } else {
                 res.redirect('/database');
@@ -100,7 +106,6 @@ async function run() {
                 }
 
                 projects = await collection.find().sort({ serialNo: 1 }).toArray();
-                console.log("This data is inserted:", newProject);
                 
                 res.redirect('/database');
             } else {

@@ -13,71 +13,72 @@
     <% } %>
     <div class="container">
         <h2>Projects Database</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Sl. No</th>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Repository</th>
-                    <th>Link</th>
-                    <th>Readme</th>
-                    <th>Thumbnail</th>
+        <form id="editForm" action="/edit" method="post">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sl. No</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Repository</th>
+                        <th>Link</th>
+                        <th>Readme</th>
+                        <th>Thumbnail</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% projects.forEach((project, index) => { %>
+                    <tr>
+                        <td>
+                            <input type="hidden" name="projects[<%= index %>]._id" value="<%= project._id %>">
+                            <input type="hidden" name="projects[<%= index %>].originalSerialNo" value="<%= project.serialNo %>">
+                            <input type="text" name="projects[<%= index %>].serialNo" value="<%= project.serialNo %>">
+                        </td>
+                        <td>
+                            <input type="text" name="projects[<%= index %>].name" value="<%= project.name %>">
+                        </td>
+                        <td>
+                            <input type="text" name="projects[<%= index %>].description" value="<%= project.description %>">
+                        </td>
+                        <td>
+                            <input type="text" name="projects[<%= index %>].repo" value="<%= project.repo %>">
+                        </td>
+                        <td>
+                            <input type="text" name="projects[<%= index %>].link" value="<%= project.link %>">
+                        </td>
+                        <td>
+                            <input type="text" name="projects[<%= index %>].readme" value="<%= project.readme %>">
+                        </td>
+                        <td>
+                            <input type="text" name="projects[<%= index %>].thumbnail" value="<%= project.thumbnail %>">
+                        </td>
+                    </tr>
+                    <% }); %>
                     <% if (editable) { %>
-                    <th>Action</th>
+                    <tr>
+                        <td colspan="7">
+                            <button id="saveButton" class="save-btn" type="submit" style="display:none;">Save All Changes</button>
+                        </td>
+                    </tr>
                     <% } %>
-                </tr>
-            </thead>
-            <tbody>
-                <% projects.forEach((project, index) => { %>
-                <tr>
-                    <form id="form<%= index %>" action="/edit" method="post" class="edit-form">
-                        <td>
-                            <input type="hidden" name="index" value="<%= index %>">
-                            <input type="text" name="serialNo" value="<%= project.serialNo %>" readonly>
-                        </td>
-                        <td>
-                            <input type="text" name="name" value="<%= project.name %>">
-                        </td>
-                        <td>
-                            <input type="text" name="description" value="<%= project.description %>">
-                        </td>
-                        <td>
-                            <input type="text" name="repo" value="<%= project.repo %>">
-                        </td>
-                        <td>
-                            <input type="text" name="link" value="<%= project.link %>">
-                        </td>
-                        <td>
-                            <input type="text" name="readme" value="<%= project.readme %>">
-                        </td>
-                        <td>
-                            <input type="text" name="thumbnail" value="<%= project.thumbnail %>">
-                        </td>
-                        <% if (editable) { %>
-                        <td>
-                            <button type="submit" form="form<%= index %>">Save</button>
-                        </td>
-                        <% } %>
-                    </form>
-                </tr>
-                <% }); %>
-                <% if (editable) { %>
-                <tr>
-                    <form action="/add" method="post" class="edit-form">
-                        <td><input type="text" name="serialNo" placeholder="Serial No"></td>
-                        <td><input type="text" name="name" placeholder="Name"></td>
-                        <td><input type="text" name="description" placeholder="Description"></td>
-                        <td><input type="text" name="repo" placeholder="Repository"></td>
-                        <td><input type="text" name="link" placeholder="Link"></td>
-                        <td><input type="text" name="readme" placeholder="Readme"></td>
-                        <td><input type="text" name="thumbnail" placeholder="Thumbnail"></td>
-                        <td><button type="submit">Add</button></td>
-                    </form>
-                </tr>
-                <% } %>
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </form>
+        <% if (editable) { %>
+        <form action="/add" method="post" class="add-form">
+            <h3>Add New Project</h3>
+            <div class="form-group">
+                <input type="text" name="serialNo" placeholder="Serial No">
+                <input type="text" name="name" placeholder="Name">
+                <input type="text" name="description" placeholder="Description">
+                <input type="text" name="repo" placeholder="Repository">
+                <input type="text" name="link" placeholder="Link">
+                <input type="text" name="readme" placeholder="Readme">
+                <input type="text" name="thumbnail" placeholder="Thumbnail">
+            </div>
+            <button type="submit" class="add-btn">Add</button>
+        </form>
+        <% } %>
     </div>
     <script src="/script.js"></script>
 </body>
