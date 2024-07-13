@@ -18,7 +18,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 const uri = 'mongodb://localhost:27017';
 const dbName = 'Mayank';
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+const client = new MongoClient(uri);
 
 let projects = [];
 
