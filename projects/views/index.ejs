@@ -7,13 +7,16 @@
     <link rel="stylesheet" href="/style.css">
 </head>
 <body>
+    <%- include('header') %>
     <div class="container">
         <h1>Projects</h1>
         <div class="cards">
+            <% projects.forEach(project => { %>
                 <div class="card">
-                    <h2>Name</h2>
-                    <p>Description</p>
+                    <h2><%= project.title %></h2>
+                    <p><%= project.description %></p>
                 </div>
+            <% }) %>
         </div>
     </div>
 </body>
