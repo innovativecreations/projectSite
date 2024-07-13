@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="database.css">
+    <link rel="stylesheet" href="/database.css">
     <title>Projects Database</title>
 </head>
 <body>
@@ -31,87 +31,35 @@
             <tbody>
                 <% projects.forEach((project, index) => { %>
                 <tr>
-                    <td>
-                        <% if (editable) { %>
-                        <form id="form<%= index %>" action="/edit" method="post" class="edit-form">
+                    <form id="form<%= index %>" action="/edit" method="post" class="edit-form">
+                        <td>
                             <input type="hidden" name="index" value="<%= index %>">
                             <input type="text" name="serialNo" value="<%= project.serialNo %>" readonly>
-                        </form>
-                        <% } else { %>
-                        <%= project.serialNo %>
-                        <% } %>
-                    </td>
-                    <td>
-                        <% if (editable) { %>
-                        <form action="/edit" method="post" class="edit-form">
-                            <input type="hidden" name="index" value="<%= index %>">
-                            <input type="hidden" name="serialNo" value="<%= project.serialNo %>">
+                        </td>
+                        <td>
                             <input type="text" name="name" value="<%= project.name %>">
-                        </form>
-                        <% } else { %>
-                        <%= project.name %>
-                        <% } %>
-                    </td>
-                    <td>
-                        <% if (editable) { %>
-                        <form action="/edit" method="post" class="edit-form">
-                            <input type="hidden" name="index" value="<%= index %>">
-                            <input type="hidden" name="serialNo" value="<%= project.serialNo %>">
+                        </td>
+                        <td>
                             <input type="text" name="description" value="<%= project.description %>">
-                        </form>
-                        <% } else { %>
-                        <%= project.description %>
-                        <% } %>
-                    </td>
-                    <td>
-                        <% if (editable) { %>
-                        <form action="/edit" method="post" class="edit-form">
-                            <input type="hidden" name="index" value="<%= index %>">
-                            <input type="hidden" name="serialNo" value="<%= project.serialNo %>">
+                        </td>
+                        <td>
                             <input type="text" name="repo" value="<%= project.repo %>">
-                        </form>
-                        <% } else { %>
-                        <a href="<%= project.repo %>"><%= project.repo %></a>
-                        <% } %>
-                    </td>
-                    <td>
-                        <% if (editable) { %>
-                        <form action="/edit" method="post" class="edit-form">
-                            <input type="hidden" name="index" value="<%= index %>">
-                            <input type="hidden" name="serialNo" value="<%= project.serialNo %>">
+                        </td>
+                        <td>
                             <input type="text" name="link" value="<%= project.link %>">
-                        </form>
-                        <% } else { %>
-                        <a href="<%= project.link %>"><%= project.link %></a>
-                        <% } %>
-                    </td>
-                    <td>
-                        <% if (editable) { %>
-                        <form action="/edit" method="post" class="edit-form">
-                            <input type="hidden" name="index" value="<%= index %>">
-                            <input type="hidden" name="serialNo" value="<%= project.serialNo %>">
+                        </td>
+                        <td>
                             <input type="text" name="readme" value="<%= project.readme %>">
-                        </form>
-                        <% } else { %>
-                        <a href="<%= project.readme %>">Readme</a>
-                        <% } %>
-                    </td>
-                    <td>
-                        <% if (editable) { %>
-                        <form action="/edit" method="post" class="edit-form">
-                            <input type="hidden" name="index" value="<%= index %>">
-                            <input type="hidden" name="serialNo" value="<%= project.serialNo %>">
+                        </td>
+                        <td>
                             <input type="text" name="thumbnail" value="<%= project.thumbnail %>">
-                        </form>
-                        <% } else { %>
-                        <img src="<%= project.thumbnail %>" alt="<%= project.name %>">
+                        </td>
+                        <% if (editable) { %>
+                        <td>
+                            <button type="submit" form="form<%= index %>">Save</button>
+                        </td>
                         <% } %>
-                    </td>
-                    <% if (editable) { %>
-                    <td>
-                        <button type="submit" form="form<%= index %>">Save</button>
-                    </td>
-                    <% } %>
+                    </form>
                 </tr>
                 <% }); %>
                 <% if (editable) { %>
@@ -131,6 +79,6 @@
             </tbody>
         </table>
     </div>
-    <script src="script.js"></script>
+    <script src="/script.js"></script>
 </body>
 </html>
