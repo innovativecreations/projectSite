@@ -27,11 +27,32 @@ header nav a {
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
+.container h1 {
+    font-size: 2.5em;
+    color: #ff6600;
+    text-align: center;
+    margin-bottom: 1em;
+    position: relative;
+}
+
+.container h1::after {
+    content: '';
+    width: 80px;
+    height: 4px;
+    background-color: #ff6600;
+    display: block;
+    margin: 0.5em auto 0;
+}
+
 .cards {
     display: flex;
     flex-wrap: wrap;
     gap: 1em;
     justify-content: center;
+}
+
+.card-link {
+    text-decoration: none;
 }
 
 .card {
@@ -85,21 +106,4 @@ header nav a {
     margin: 0;
     padding: 0.5em;
     color: #ffffff;
-}
-
-.container h1 {
-    font-size: 2.5em;
-    color: #ff6600;
-    text-align: center;
-    margin-bottom: 1em;
-    position: relative;
-}
-
-.container h1::after {
-    content: '';
-    width: 80px;
-    height: 4px;
-    background-color: #ff6600;
-    display: block;
-    margin: 0.5em auto 0;
 }
