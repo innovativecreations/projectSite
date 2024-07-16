@@ -1,17 +1,29 @@
 const express = require('express');
+const { MongoClient } = require('mongodb');
 const app = express();
 const port = 3000;
 
-const projects = [
-    { title: "First Project", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ultricies nisl a enim consequat mattis. Proin tempor ullamcorper justo. Nulla eu maximus lorem. Aenean eu interdum diam. Quisque cursus urna id orci rutrum, at convallis sem congue. Curabitur sit amet est nisl. Quisque convallis tempus est ut maximus. Vivamus vita", thumbnail: "https://dummyimage.com/600x400/000/fff" },
-    { title: "Second Project", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ultricies nisl a enim consequat mattis. Proin tempor ullamcorper justo. Nulla eu maximus lorem. Aenean eu interdum diam. Quisque cursus urna id orci rutrum, at convallis sem congue. Curabitur sit amet est nisl. Quisque convallis tempus est ut maximus. Vivamus vita", thumbnail: "https://dummyimage.com/600x400/000/fff" },
-];
+const url = 'mongodb://localhost:27017';
+const dbName = 'Mayank';
 
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 
-app.get('/', (req, res) => {
-    res.render('index', { projects });
+app.get('/', async (req, res) => {
+    let client;
+    try {
+        client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
+        const db = client.db(dbName);
+        const projectsCollection = db.collection('projects');
+        const projects = await projectsCollection.find({}).toArray();
+        res.render('index', { projects });
+    } catch (err) {
+        console.error(err);
+    } finally {
+        if (client) {
+            client.close();
+        }
+    }
 });
 
 app.listen(port, () => {

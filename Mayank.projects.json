@@ -1,0 +1,24 @@
+[{
+  "_id": {
+    "$oid": "6696a134d0787772ae9ce1b0"
+  },
+  "serialNo": 1,
+  "name": "Airplane",
+  "description": "I've tried to build a remote-controlled plane whose wings collapsed😢",
+  "repo": "https://github.com/innovativecreations/Airplane",
+  "link": "",
+  "readme": "https://github.com/innovativecreations/Airplane/blob/main/README.md",
+  "thumbnail": "https://cloud-bsxy4fahg-hack-club-bot.vercel.app/0image.png"
+},
+{
+  "_id": {
+    "$oid": "6696a3a6d0787772ae9ce1b1"
+  },
+  "serialNo": 2,
+  "name": "PeriodicQuestions",
+  "description": "This project ask various questions about the periodic table",
+  "repo": "https://github.com/innovativecreations/chemistryQueModel",
+  "link": "https://innovativecreations.github.io/chemistryQueModel/periodic/index.html",
+  "readme": "",
+  "thumbnail": "https://cloud-8w6m1qq5g-hack-club-bot.vercel.app/0image.png"
+}]
