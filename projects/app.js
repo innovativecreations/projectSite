@@ -24,7 +24,7 @@ app.get('/project/:id', async (req, res) => {
     client = await MongoClient.connect(url);
     const db = client.db(dbName);
     const projectsCollection = db.collection('projects');
-    const project = await projectsCollection.findOne({ _id: ObjectId(req.params.id) });
+    const project = await projectsCollection.findOne({ _id: new ObjectId(req.params.id) });
     res.render('individual_page', { project });
     client.close();
 });
