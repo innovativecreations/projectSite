@@ -10,7 +10,10 @@
     <%- include('header') %>
     <div class="container">
         <h1><%= project.name %></h1>
-        <p><%= project.description %></p>
+        <div>
+            <pre><code><%= readmeContent %></code></pre>
+        </div>
+        <a href="<%= project.link %>">Visit Project</a>
         <a href="<%= project.repo %>">View Repository</a>
     </div>
 </body>
