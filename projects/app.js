@@ -44,7 +44,7 @@ const url = 'mongodb://localhost:27017';
 const dbName = 'Mayank';
 
 const GITHUB_API_BASE_URL = 'https://api.github.com';
-const GITHUB_TOKEN = 'token';
+const GITHUB_TOKEN = 'yo';
 
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
@@ -55,18 +55,17 @@ const readmeData = async (readmeUrl) => {
     const owner = parts[1];
     const repo = parts[2];
     const path = parts.slice(5).join('/');
-    try {
-        const response = await axios.get(`${GITHUB_API_BASE_URL}/repos/${owner}/${repo}/contents/${path}`, {
-            headers: {
-                'Authorization': `token ${GITHUB_TOKEN}`,
-                'Accept': 'application/vnd.github.v3.raw'
-            }
-        });
-        return response.data;
-    } catch (error) {
-        console.error(`Error fetching README:`, error.message);
-        return null;
-    }
+    const apiUrl = `${GITHUB_API_BASE_URL}/repos/${owner}/${repo}/contents/${path}`;
+    
+    console.log(`API URL: ${apiUrl}`);
+
+    const response = await axios.get(apiUrl, {
+        headers: {
+            'Authorization': `token ${GITHUB_TOKEN}`,
+            'Accept': 'application/vnd.github.v3.raw'
+        }
+    });
+    return response.data;
 };
 
 app.get('/', async (req, res) => {
@@ -86,7 +85,16 @@ app.get('/project/:id', async (req, res) => {
     const projectsCollection = db.collection('projects');
     const project = await projectsCollection.findOne({ _id: new ObjectId(req.params.id) });
 
-    const readmeContent = await readmeData(project.readmeUrl);
+    let readmeContent = '';
+    if (project.readme) {
+        readmeContent = await readmeData(project.readme);
+        if (!readmeContent) {
+            readmeContent = 'Error fetching README content.';
+        }
+    } else {
+        readmeContent = 'No README file available for this project.';
+    }
+    
     res.render('individual_page', { project, readmeContent });
     client.close();
 });
